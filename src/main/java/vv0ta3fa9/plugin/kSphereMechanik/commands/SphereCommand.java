@@ -604,7 +604,7 @@ public class SphereCommand implements CommandExecutor, TabCompleter {
                             .collect(Collectors.toList());
                 }
             }
-        } в
+        }
 
         if (args[0].equalsIgnoreCase("debug")) {
             if (args.length == 2) {

@@ -8,9 +8,7 @@ import vv0ta3fa9.plugin.kSphereMechanik.models.Enchantment;
 import vv0ta3fa9.plugin.kSphereMechanik.models.EnchantmentType;
 import vv0ta3fa9.plugin.kSphereMechanik.models.Sphere;
 
-/**
- * Менеджер для применения эффектов зачарований
- */
+
 public class EnchantmentManager {
     private final KSphereMechanik plugin;
 
@@ -18,9 +16,6 @@ public class EnchantmentManager {
         this.plugin = plugin;
     }
 
-    /**
-     * Применяет все эффекты зачарований сферы к игроку
-     */
     public void applyEnchantments(Player player, Sphere sphere) {
         if (player == null || sphere == null) {
             plugin.getDebugLogger().logFull("applyEnchantments: игрок или сфера null");
@@ -35,9 +30,7 @@ public class EnchantmentManager {
         }
     }
 
-    /**
-     * Применяет эффект одного зачарования
-     */
+
     private void applyEnchantment(Player player, Enchantment enchantment) {
         EnchantmentType type = enchantment.getType();
         int level = enchantment.getLevel();
@@ -45,7 +38,6 @@ public class EnchantmentManager {
 
         switch (type) {
             case DAMAGE_BOOST:
-                // Обрабатывается в DamageListener
                 break;
                 
             case SPEED_BOOST:
@@ -75,7 +67,7 @@ public class EnchantmentManager {
                 
             case FIRE_RESISTANCE:
                 int duration = cfg.getEnchantmentIntValue("fire_resistance", "duration_ticks");
-                if (duration == 0) duration = -1; // fallback to infinite
+                if (duration == 0) duration = -1; // fallback
                 player.addPotionEffect(new PotionEffect(
                     PotionEffectType.FIRE_RESISTANCE, duration, 0, false, false
                 ));
@@ -98,10 +90,6 @@ public class EnchantmentManager {
         }
     }
 
-    /**
-     * Удаляет все эффекты зачарований сферы у игрока
-     * Если sphere == null, удаляет все эффекты (когда сфера убрана)
-     */
     public void removeEnchantments(Player player, Sphere sphere) {
         if (player == null) return;
 
@@ -120,9 +108,6 @@ public class EnchantmentManager {
         }
     }
 
-    /**
-     * Получает множитель урона от зачарования
-     */
     public double getDamageMultiplier(Sphere sphere) {
         if (sphere == null || !sphere.hasEnchantment(EnchantmentType.DAMAGE_BOOST)) {
             return 1.0;
@@ -136,9 +121,6 @@ public class EnchantmentManager {
         return 1.0 + (multiplierPerLevel * level);
     }
 
-    /**
-     * Получает процент снижения урона
-     */
     public double getDamageReduction(Sphere sphere) {
         if (sphere == null || !sphere.hasEnchantment(EnchantmentType.DAMAGE_REDUCTION)) {
             return 0.0;

@@ -14,10 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Менеджер для сохранения и загрузки данных сфер
- * Все операции с файлами выполняются асинхронно для оптимизации производительности
- */
 public class DataManager {
     private final KSphereMechanik plugin;
     private final File dataFolder;
@@ -27,8 +23,7 @@ public class DataManager {
 
     public DataManager(KSphereMechanik plugin) {
         this.plugin = plugin;
-        
-        // Убеждаемся, что папка плагина создана
+
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdirs();
             plugin.getLogger().info("Создана папка плагина: " + plugin.getDataFolder().getAbsolutePath());
@@ -47,9 +42,6 @@ public class DataManager {
         startAutoSave();
     }
 
-    /**
-     * Запускает автоматическое сохранение
-     */
     private void startAutoSave() {
         int interval = plugin.getConfigManager().getAutoSaveInterval() * 20; // секунды -> тики
         
@@ -60,9 +52,6 @@ public class DataManager {
         plugin.getDebugLogger().logDetailed("Автосохранение запущено с интервалом " + interval + " тиков");
     }
 
-    /**
-     * Останавливает автоматическое сохранение
-     */
     public void stopAutoSave() {
         if (autoSaveTaskId != -1) {
             plugin.getServer().getScheduler().cancelTask(autoSaveTaskId);
@@ -70,9 +59,6 @@ public class DataManager {
         }
     }
 
-    /**
-     * Сохраняет сферу (асинхронно)
-     */
     public void saveSphere(Sphere sphere) {
         if (sphere == null) {
             plugin.getDebugLogger().logFull("Попытка сохранить null сферу");
@@ -81,10 +67,8 @@ public class DataManager {
 
         plugin.getDebugLogger().logFull("Сохранение сферы: " + sphere.getId());
 
-        // Обновляем кеш синхронно
         loadedSpheres.put(sphere.getId(), sphere);
 
-        // Сохранение в файл - асинхронно
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             String format = plugin.getConfigManager().getDataFormat().toLowerCase();
 
@@ -100,9 +84,6 @@ public class DataManager {
         });
     }
 
-    /**
-     * Сохраняет сферу в JSON формате
-     */
     private void saveSphereJson(Sphere sphere) {
         File file = new File(dataFolder, sphere.getId().toString() + ".json");
         
@@ -114,8 +95,7 @@ public class DataManager {
             json.addProperty("reborn", sphere.isReborn());
             json.addProperty("ability", sphere.getAbility() != null ? sphere.getAbility().name() : null);
             json.addProperty("lastAbilityUse", sphere.getLastAbilityUse());
-            
-            // Зачарования
+
             JsonObject enchantmentsJson = new JsonObject();
             for (Enchantment enchantment : sphere.getEnchantments()) {
                 JsonObject enchantJson = new JsonObject();
@@ -133,9 +113,6 @@ public class DataManager {
         }
     }
 
-    /**
-     * Сохраняет сферу в YAML формате
-     */
     private void saveSphereYaml(Sphere sphere) {
         File file = new File(dataFolder, sphere.getId().toString() + ".yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
@@ -146,8 +123,7 @@ public class DataManager {
         config.set("reborn", sphere.isReborn());
         config.set("ability", sphere.getAbility() != null ? sphere.getAbility().name() : null);
         config.set("lastAbilityUse", sphere.getLastAbilityUse());
-        
-        // Зачарования
+
         List<Map<String, Object>> enchantmentsList = new ArrayList<>();
         for (Enchantment enchantment : sphere.getEnchantments()) {
             Map<String, Object> enchantMap = new HashMap<>();
@@ -166,9 +142,6 @@ public class DataManager {
         }
     }
 
-    /**
-     * Загружает сферу по ID (синхронно, если в кеше, иначе асинхронно)
-     */
     public Sphere loadSphere(UUID sphereId) {
         if (loadedSpheres.containsKey(sphereId)) {
             plugin.getDebugLogger().logFull("Сфера найдена в кеше: " + sphereId);
@@ -196,9 +169,6 @@ public class DataManager {
         return sphere;
     }
 
-    /**
-     * Загружает сферу асинхронно с колбэком
-     */
     public void loadSphereAsync(UUID sphereId, java.util.function.Consumer<Sphere> callback) {
         if (loadedSpheres.containsKey(sphereId)) {
             callback.accept(loadedSpheres.get(sphereId));
@@ -221,9 +191,6 @@ public class DataManager {
         });
     }
 
-    /**
-     * Загружает сферу из JSON
-     */
     private Sphere loadSphereJson(UUID sphereId) {
         File file = new File(dataFolder, sphereId.toString() + ".json");
         if (!file.exists()) {
@@ -268,9 +235,6 @@ public class DataManager {
         }
     }
 
-    /**
-     * Загружает сферу из YAML
-     */
     private Sphere loadSphereYaml(UUID sphereId) {
         File file = new File(dataFolder, sphereId.toString() + ".yml");
         if (!file.exists()) {
@@ -292,8 +256,7 @@ public class DataManager {
         if (config.contains("lastAbilityUse")) {
             sphere.setLastAbilityUse(config.getLong("lastAbilityUse"));
         }
-        
-        // Зачарования
+
         if (config.contains("enchantments")) {
             List<Map<?, ?>> enchantmentsList = config.getMapList("enchantments");
             for (Map<?, ?> enchantMap : enchantmentsList) {
@@ -309,9 +272,6 @@ public class DataManager {
         return sphere;
     }
 
-    /**
-     * Сохраняет все сферы из реестра
-     */
     public void saveAllSpheres() {
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             Collection<Sphere> spheres = plugin.getSphereManager().getAllSpheres();
@@ -332,9 +292,6 @@ public class DataManager {
         });
     }
 
-    /**
-     * Сохраняет все сферы
-     */
     public void saveAllSpheresSync() {
         Collection<Sphere> spheres = plugin.getSphereManager().getAllSpheres();
         int saved = 0;
@@ -352,10 +309,6 @@ public class DataManager {
         
         plugin.getDebugLogger().logFull("Сохранено сфер при выключении: " + saved);
     }
-
-    /**
-     * Удаляет файл сферы
-     */
     public void deleteSphere(UUID sphereId) {
         loadedSpheres.remove(sphereId);
 
@@ -370,17 +323,10 @@ public class DataManager {
         });
     }
 
-    /**
-     * Очищает кеш
-     */
     public void clearCache() {
         loadedSpheres.clear();
     }
-    
-    /**
-     * Загружает все сферы из папки data при старте плагина
-     * Выполняется синхронно чтобы гарантировать загрузку до использования
-     */
+
     public int loadAllSpheres() {
         if (!dataFolder.exists()) {
             return 0;

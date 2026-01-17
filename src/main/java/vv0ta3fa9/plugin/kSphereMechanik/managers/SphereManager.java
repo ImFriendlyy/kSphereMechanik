@@ -11,9 +11,6 @@ import vv0ta3fa9.plugin.kSphereMechanik.utils.ItemBuilder;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Менеджер для управления сферами игроков
- */
 public class SphereManager {
     private final KSphereMechanik plugin;
     private final Map<UUID, Sphere> playerSpheres; // UUID игрока -> сфера
@@ -28,10 +25,6 @@ public class SphereManager {
         this.itemBuilder = new ItemBuilder(plugin);
         this.capacityCalculator = new CapacityCalculator(plugin);
     }
-
-    /**
-     * Создает новую сферу
-     */
     public Sphere createSphere(SphereType type, SphereRank rank) {
         UUID sphereId = UUID.randomUUID();
         Sphere sphere = new Sphere(sphereId, type, rank);
@@ -41,10 +34,6 @@ public class SphereManager {
         return sphere;
     }
 
-    /**
-     * Выдает сферу игроку
-     * Сохранение сферы выполняется асинхронно в фоне
-     */
     public ItemStack giveSphereToPlayer(Player player, SphereType type, SphereRank rank) {
         Sphere sphere = createSphere(type, rank);
 
@@ -75,10 +64,6 @@ public class SphereManager {
         return item;
     }
 
-    /**
-     * Получает сферу из ItemStack
-     * Если сфера не в реестре - пытается загрузить из файла
-     */
     public Sphere getSphereFromItem(ItemStack item) {
         if (item == null || !itemBuilder.isSphere(item)) {
             plugin.getDebugLogger().logFull("Предмет не является сферой");
@@ -93,7 +78,6 @@ public class SphereManager {
 
         plugin.getDebugLogger().logFull("Извлечен ID сферы: " + sphereId);
 
-        // Сначала проверяем реестр
         Sphere sphere = sphereRegistry.get(sphereId);
         if (sphere != null) {
             plugin.getDebugLogger().logFull("Сфера найдена в реестре: " + sphereId);
@@ -102,10 +86,8 @@ public class SphereManager {
 
         plugin.getDebugLogger().logFull("Сфера не найдена в реестре, пытаемся загрузить из файла: " + sphereId);
 
-        // Если нет в реестре - пытаемся загрузить из файла
         sphere = plugin.getDataManager().loadSphere(sphereId);
         if (sphere != null) {
-            // Регистрируем загруженную сферу
             sphereRegistry.put(sphereId, sphere);
             plugin.getDebugLogger().logFull("Сфера загружена из файла: " + sphereId);
         } else {
@@ -115,9 +97,6 @@ public class SphereManager {
         return sphere;
     }
 
-    /**
-     * Обновляет ItemStack сферы (после изменения зачарований и т.д.)
-     */
     public ItemStack updateSphereItem(ItemStack item, Sphere sphere) {
         if (item == null || sphere == null) {
             return null;
@@ -126,14 +105,9 @@ public class SphereManager {
         return itemBuilder.createSphereItem(sphere);
     }
 
-    /**
-     * Добавляет зачарование к сфере
-     * Сохранение выполняется асинхронно
-     */
     public boolean addEnchantment(Sphere sphere, vv0ta3fa9.plugin.kSphereMechanik.models.EnchantmentType type, int level) {
         if (sphere == null) return false;
-        
-        // Проверка максимального уровня
+
         if (level > type.getMaxLevel()) {
             return false;
         }
@@ -144,7 +118,6 @@ public class SphereManager {
         boolean added = sphere.addEnchantment(enchantment, maxCapacity);
         if (added) {
             plugin.getDebugLogger().logDetailed("Добавлено зачарование " + type + " Ур." + level + " к сфере " + sphere.getId());
-            // Сохраняем асинхронно
             plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
                 plugin.getDataManager().saveSphere(sphere);
             });
@@ -153,10 +126,6 @@ public class SphereManager {
         return added;
     }
 
-    /**
-     * Удаляет зачарование из сферы
-     * Сохранение выполняется асинхронно
-     */
     public boolean removeEnchantment(Sphere sphere, vv0ta3fa9.plugin.kSphereMechanik.models.EnchantmentType type) {
         if (sphere == null) return false;
         
@@ -172,43 +141,30 @@ public class SphereManager {
         return removed;
     }
 
-    /**
-     * Очищает все зачарования сферы
-     * Сохранение выполняется асинхронно
-     */
     public void clearSphere(Sphere sphere) {
         if (sphere == null) return;
         
         sphere.clearEnchantments();
         plugin.getDebugLogger().log("Очищена сфера " + sphere.getId());
-        // Сохраняем асинхронно
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             plugin.getDataManager().saveSphere(sphere);
         });
     }
 
-    /**
-     * Перерождает сферу
-     * Сохранение выполняется асинхронно
-     */
     public boolean rebirthSphere(Sphere sphere, Player player) {
         if (sphere == null || player == null) return false;
-        
-        // Проверка уровня опыта
+
         int requiredLevel = plugin.getConfigManager().getRebirthExpLevel();
         if (player.getLevel() < requiredLevel) {
             return false;
         }
         
         if (sphere.getType() == SphereType.NORMAL) {
-            // Обычная сфера - очистка всех зачарований
             clearSphere(sphere);
             sphere.setReborn(false);
         } else if (sphere.getType() == SphereType.ACTIVE) {
-            // Активная сфера - зачарования остаются, способность может измениться
             double chance = plugin.getConfigManager().getRebirthAbilityChangeChance();
             if (Math.random() < chance) {
-                // Меняем способность на случайную
                 vv0ta3fa9.plugin.kSphereMechanik.models.AbilityType[] abilities = vv0ta3fa9.plugin.kSphereMechanik.models.AbilityType.values();
                 vv0ta3fa9.plugin.kSphereMechanik.models.AbilityType newAbility = abilities[new Random().nextInt(abilities.length)];
                 sphere.setAbility(newAbility);
@@ -218,36 +174,26 @@ public class SphereManager {
         
         sphere.setReborn(true);
 
-        // Вызываем событие перерождения
         SphereEvents.callSphereRebirthEvent(player, sphere);
 
         plugin.getDebugLogger().log("Сфера " + sphere.getId() + " перерождена игроком " + player.getName());
-        // Сохраняем асинхронно
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             plugin.getDataManager().saveSphere(sphere);
         });
         return true;
     }
 
-    /**
-     * Регистрирует сферу
-     */
+
     public void registerSphere(Sphere sphere) {
         if (sphere != null) {
             sphereRegistry.put(sphere.getId(), sphere);
         }
     }
 
-    /**
-     * Удаляет сферу из реестра
-     */
     public void unregisterSphere(UUID sphereId) {
         sphereRegistry.remove(sphereId);
     }
 
-    /**
-     * Получает все зарегистрированные сферы
-     */
     public Collection<Sphere> getAllSpheres() {
         return Collections.unmodifiableCollection(sphereRegistry.values());
     }

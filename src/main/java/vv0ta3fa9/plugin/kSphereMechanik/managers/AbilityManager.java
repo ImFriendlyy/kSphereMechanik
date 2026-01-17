@@ -13,9 +13,6 @@ import vv0ta3fa9.plugin.kSphereMechanik.models.Sphere;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Менеджер для обработки активных способностей
- */
 public class AbilityManager {
     private final KSphereMechanik plugin;
 
@@ -23,9 +20,6 @@ public class AbilityManager {
         this.plugin = plugin;
     }
 
-    /**
-     * Активирует способность сферы
-     */
     public boolean activateAbility(Player player, Sphere sphere) {
         if (player == null || sphere == null || !sphere.isActive()) {
             return false;
@@ -79,9 +73,6 @@ public class AbilityManager {
         return activated;
     }
 
-    /**
-     * Активирует способность Берсерк
-     */
     private boolean activateBerserk(Player player, Sphere sphere) {
         long duration = (long) plugin.getConfigManager().getAbilityValue("berserk", "duration");
         double damageMultiplier = plugin.getConfigManager().getAbilityValue("berserk", "damage_multiplier");
@@ -145,9 +136,6 @@ public class AbilityManager {
         return removed > 0;
     }
 
-    /**
-     * Активирует способность Рывок
-     */
     private boolean activateDash(Player player, Sphere sphere) {
         double distance = plugin.getConfigManager().getAbilityValue("dash", "distance");
         int invulnerabilityTicks = (int) plugin.getConfigManager().getAbilityValue("dash", "invulnerability_ticks");
@@ -180,9 +168,6 @@ public class AbilityManager {
         return true;
     }
 
-    /**
-     * Обрабатывает эффект Вампира при нанесении урона
-     */
     public void handleVampire(Player player, double damage) {
         double lifestealPercent = plugin.getConfigManager().getAbilityValue("vampire", "lifesteal_percent");
         double minDamage = plugin.getConfigManager().getAbilityValue("vampire", "min_damage");
@@ -196,11 +181,7 @@ public class AbilityManager {
         plugin.getDebugLogger().logFull("Вампир восстановил " + healAmount + " HP игроку " + player.getName());
     }
 
-    /**
-     * Проверяет, является ли эффект негативным
-     */
     private boolean isNegativeEffect(PotionEffectType type) {
-        // Список известных негативных эффектов
         return type == PotionEffectType.POISON ||
                type == PotionEffectType.WITHER ||
                type == PotionEffectType.SLOWNESS ||
@@ -240,8 +221,7 @@ public class AbilityManager {
                 count = 15;
                 break;
         }
-        
-        // Показываем партиклы вокруг игрока
+
         player.getWorld().spawnParticle(particle, loc, count, 0.5, 0.5, 0.5, 0.1);
     }
 }

@@ -22,16 +22,10 @@ public class SphereEnchantEvent extends SphereEvent implements Cancellable {
         this.level = level;
     }
 
-    /**
-     * Получает тип зачарования
-     */
     public EnchantmentType getEnchantmentType() {
         return enchantmentType;
     }
 
-    /**
-     * Получает уровень зачарования
-     */
     public int getLevel() {
         return level;
     }

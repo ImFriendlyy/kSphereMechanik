@@ -20,9 +20,6 @@ public class SphereAbilityActivateEvent extends SphereEvent implements Cancellab
         this.abilityType = abilityType;
     }
 
-    /**
-     * Получает тип активируемой способности
-     */
     public AbilityType getAbilityType() {
         return abilityType;
     }

@@ -20,16 +20,10 @@ public abstract class SphereEvent extends Event {
         this.sphere = sphere;
     }
 
-    /**
-     * Получает игрока, связанного с событием
-     */
     public Player getPlayer() {
         return player;
     }
 
-    /**
-     * Получает сферу, связанную с событием
-     */
     public Sphere getSphere() {
         return sphere;
     }

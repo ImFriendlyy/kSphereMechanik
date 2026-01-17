@@ -9,10 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Менеджер конфигурации плагина
- * Все значения получаются через геттеры напрямую из FileConfiguration
- */
 public class ConfigManager {
     private final KSphereMechanik plugin;
     private FileConfiguration config;
