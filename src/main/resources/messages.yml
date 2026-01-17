@@ -1,0 +1,44 @@
+# Сообщения плагина
+messages:
+  prefix: "&8[&6kSpheres&8] &r"
+
+  # Общие сообщения
+  no_permission: "&cУ вас нет прав для выполнения этой команды!"
+  player_not_found: "&cИгрок &e{player} &cне найден!"
+  invalid_sphere_type: "&cНеверный тип сферы! Доступные: NORMAL, ACTIVE, DONATE"
+  invalid_sphere_rank: "&cНеверный ранг сферы! Доступные: RARE, MYTHIC, LEGENDARY"
+
+  # lore
+  lore_copacity: "&7Емкость: &e{used}&7/&e{max}"
+  lore_skill: " &6Активная способность:"
+  lore_used: " &7Использование: &eПКМ"
+  lore_enchant: "&6Зачарования:"
+  lore_rebirth: "&d&l[Перерожден]"
+
+  # Команды
+  sphere_given: "&aСфера выдана игроку &e{player}&a!"
+  sphere_cleared: "&aСфера очищена!"
+  config_reloaded: "&aКонфигурация перезагружена!"
+
+  # Зачарования
+  enchantment_added: "&aЗачарование &e{enchantment} &aдобавлено!"
+  enchantment_removed: "&cЗачарование &e{enchantment} &cудалено!"
+  enchantment_not_enough_capacity: "&cНедостаточно емкости для этого зачарования!"
+  enchantment_max_level: "&cМаксимальный уровень зачарования достигнут!"
+
+  # Способности
+  ability_activated: "&aСпособность &e{ability} &aактивирована!"
+  ability_cooldown: "&cСпособность на перезарядке! Осталось: &e{time} &cсекунд"
+  ability_selected: "&aСпособность &e{ability} &aвыбрана!"
+
+  # Перерождение
+  rebirth_success: "&aСфера перерождена!"
+  rebirth_ability_changed: "&eСпособность изменена на &a{ability}&e!"
+  rebirth_ability_unchanged: "&7Способность осталась прежней"
+  rebirth_not_enough_exp: "&cНедостаточно уровня опыта! Требуется: &e{level}"
+  rebirth_triggered: "&dПерерождение активировано! Вы восстановлены!"
+
+  # Эффекты
+  effect_applied: "&aЭффект &e{effect} &aприменен!"
+  effect_removed: "&cЭффект &e{effect} &cснят!"
+

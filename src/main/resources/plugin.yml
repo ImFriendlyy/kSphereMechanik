@@ -1,0 +1,16 @@
+name: kSphereMechanik
+version: 1.0.0
+main: vv0ta3fa9.plugin.kSphereMechanik.MainClassManagment
+api-version: '1.21.1'
+authors: [ vv0t3afa9 ]
+website: t.me/kapybarkaaa
+commands:
+  sphere:
+    description: "Основная команда для работы со сферами"
+    usage: "/sphere [help|give|clear|reload|debug]"
+    aliases: [sph, sphh]
+    permission: permission.node
+    permission-message: "You do not have permission to use this command"
+  runes:
+    description: Настройки игрока для сфер
+    usage: /runes [rebirth|master]

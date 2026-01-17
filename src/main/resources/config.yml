@@ -1,0 +1,187 @@
+# ============================================
+# kSphereMechanik
+# ============================================
+
+# Настройки tooltips (кастомные символы для текстурки)
+tooltips:
+  enabled: true
+  # Специальные символы для начала и конца строки
+  # {item_name} и {item_lore} будут заменены на реальные значения
+  item_name: " ꀀ {item_name}"
+  item_lore: " ꀅ {item_lore}"
+
+# Настройки сфер
+spheres:
+  # Емкость для каждого ранга
+  ranks:
+    rare:
+      capacity: 3
+      display_name: "&7Редкая"
+    mythic:
+      capacity: 5
+      display_name: "&5Мифическая"
+    legendary:
+      capacity: 7
+      display_name: "&6Легендарная"
+
+  lore_format:
+
+  # Материал предмета для сфер
+  item_material: "NETHER_STAR"
+  
+  # CustomModelData для разных типов и рангов
+  model_data:
+    normal:
+      rare: 1000
+      mythic: 1001
+      legendary: 1002
+    active:
+      rare: 2000
+      mythic: 2001
+      legendary: 2002
+    donate:
+      rare: 3000
+      mythic: 3001
+      legendary: 3002
+
+# Настройки зачарований
+enchantments:
+  # Базовая стоимость зачарования (в единицах емкости)
+  base_cost: 2
+  
+  # Дополнительная стоимость за каждый уровень выше первого
+  level_cost: 1
+  
+  # Настройки для каждого типа зачарования
+  damage_boost:
+    display_name: "&cПовышение урона"
+    max_level: 3
+    # Множитель урона на уровень (1.0 = 100%, 1.1 = 110%)
+    damage_multiplier_per_level: 0.15
+  
+  speed_boost:
+    display_name: "&bПовышение скорости"
+    max_level: 3
+    # Уровень эффекта скорости на уровень зачарования
+    speed_level_per_level: 1
+  
+  haste:
+    display_name: "&eСпешка"
+    max_level: 2
+    # Уровень эффекта спешки на уровень зачарования
+    haste_level_per_level: 1
+  
+  fire_resistance:
+    display_name: "&6Огнеупорность"
+    max_level: 1
+    # Длительность эффекта в тиках (20 тиков = 1 секунда)
+    duration_ticks: -1  # -1 = бесконечно, пока сфера активна
+  
+  damage_reduction:
+    display_name: "&7Снижение урона"
+    max_level: 2
+    # Процент снижения урона на уровень
+    reduction_percent_per_level: 0.10
+  
+  extra_health:
+    display_name: "&aДополнительные HP"
+    max_level: 2
+    # Дополнительные сердца на уровень
+    hearts_per_level: 2
+  
+  rebirth:
+    display_name: "&dПерерождение"
+    max_level: 1
+    # Процент восстановления HP при смерти (1.0 = 100%)
+    hp_restore_percent: 1.0
+    # Эффекты после перерождения (список)
+    effects_after_rebirth:
+      - "REGENERATION:200:1"  # формат: EFFECT:duration_ticks:level
+      - "FIRE_RESISTANCE:600:1"
+
+# Настройки активных способностей
+abilities:
+  vampire:
+    display_name: "&cВампир"
+    cooldown: 60000  # в миллисекундах
+    # Процент урона, возвращаемого как HP (0.1 = 10%)
+    lifesteal_percent: 0.15
+    # Минимальный урон для активации
+    min_damage: 1.0
+  
+  berserk:
+    display_name: "&4Берсерк"
+    cooldown: 120000  # 2 минуты
+    duration: 10000  # 10 секунд
+    # Множитель урона во время берсерка
+    damage_multiplier: 1.5
+    # Уровень эффекта скорости
+    speed_level: 2
+    # Уровень эффекта силы
+    strength_level: 1
+  
+  steadfast:
+    display_name: "&bСтойкий"
+    cooldown: 90000  # 1.5 минуты
+    duration: 15000  # 15 секунд
+    # Процент снижения урона
+    damage_reduction_percent: 0.50
+    # Уровень эффекта сопротивления
+    resistance_level: 2
+  
+  dispel:
+    display_name: "&aРазвеивание"
+    cooldown: 45000  # 45 секунд
+    # Снимать только негативные эффекты
+    only_negative: true
+    # Список эффектов, которые НЕ снимаются (если пусто - снимаются все)
+    blacklist: []
+  
+  dash:
+    display_name: "&eРывок"
+    cooldown: 30000  # 30 секунд
+    # Дистанция телепорта в блоках
+    distance: 8.0
+    # Защита от урона при рывке (в тиках)
+    invulnerability_ticks: 5
+
+# Настройки перерождения
+rebirth:
+  # Требуемый уровень опыта для перерождения
+  exp_level_required: 30
+  
+  # Шанс изменения способности при перерождении активной сферы (0.0 - 1.0)
+  ability_change_chance: 0.5
+  
+  # Процент восстановления HP при перерождении (зачарование)
+  hp_restore_percent: 1.0
+
+
+# Настройки данных
+data:
+  # Формат хранения (json или yaml)
+  format: "json"
+  
+  # Интервал автосохранения в секундах
+  auto_save_interval: 300  # 5 минут
+  
+  # Кеширование данных игроков
+  cache_enabled: true
+  cache_size: 100
+
+# Настройки отладки
+debug:
+  enabled: true
+  level: 3  # 1 = базовый, 2 = детальный, 3 = полный
+  log_to_file: true
+  log_file: "logs/kspheres-debug.log"
+  show_in_chat: true  # Показывать отладочную информацию в чате для админов
+
+# Настройки производительности
+performance:
+  # Интервал проверки всех игроков (в тиках)
+  # Проверяет ВСЕХ онлайн игроков и синхронизирует список тех, у кого сферы
+  # Внимание, настройка не обязательно к применению, ввиду этого можно просто поставить большое число.
+  # 2400 тиков = 120 секунд
+  global_check_interval: 2400
+
