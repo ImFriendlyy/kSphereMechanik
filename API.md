@@ -34,11 +34,9 @@ public class ExamplePlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        // Регистрируем команды
         getCommand("mysphere").setExecutor(this);
         getCommand("checksphere").setExecutor(this);
 
-        // Регистрируем слушатели событий
         Bukkit.getPluginManager().registerEvents(this, this);
 
         getLogger().info("ExamplePlugin включен!");
@@ -64,7 +62,7 @@ public class ExamplePlugin extends JavaPlugin implements Listener {
     }
 
     private boolean handleMySphere(Player player) {
-        // Выдаем сферу с зачарованием
+        // Выдача сферы с зачарованием
         SphereAPI.giveSphereWithEnchantment(
             player,
             SphereType.ACTIVE,
@@ -149,4 +147,5 @@ public class ExamplePlugin extends JavaPlugin implements Listener {
 - Все методы SphereAPI потокобезопасны и могут вызываться из любого потока
 - События вызываются в главном потоке Bukkit
 - Для работы с инвентарем используйте главный поток
+
 - API инициализируется автоматически при включении kSphereMechanik
