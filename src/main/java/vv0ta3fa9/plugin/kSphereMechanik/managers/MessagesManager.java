@@ -25,7 +25,7 @@ public class MessagesManager {
         this.messagesFile = new File(plugin.getDataFolder(), "messages.yml");
 
         if (!messagesFile.exists()) {
-            plugin.saveDefaultConfig();
+            plugin.saveResource("messages.yml", true);
         }
 
         message = YamlConfiguration.loadConfiguration(messagesFile);

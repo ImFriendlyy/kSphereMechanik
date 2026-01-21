@@ -20,7 +20,9 @@ public final class MainClassManagment extends KSphereMechanik {
 
             registerCommands();
             registerListeners();
-            startEffectCheckTasks();
+            if (configManager.getConfig().getBoolean("performance.enabled")) {
+                startEffectCheckTasks();
+            }
             getLogger().info("kSphereMechanik успешно загружен!");
             debugLogger.log("Плагин включен");
         } catch (Exception e) {

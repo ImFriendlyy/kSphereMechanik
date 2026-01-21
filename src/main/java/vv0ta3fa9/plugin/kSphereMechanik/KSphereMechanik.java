@@ -58,8 +58,10 @@ public class KSphereMechanik extends JavaPlugin {
     protected void registerListeners() {
         getLogger().info("Регистрация ивентов...");
         getServer().getPluginManager().registerEvents(new SphereUseListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
+        if (configManager.getConfig().getBoolean("performance.enabled")) {
+            getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+            getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
+        }
         getServer().getPluginManager().registerEvents(new DeathListener(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerItemHeldListener(this), this);
@@ -68,7 +70,7 @@ public class KSphereMechanik extends JavaPlugin {
     protected void startEffectCheckTasks() {
         int globalCheckInterval = configManager.getGlobalCheckInterval();
 
-        getServer().getScheduler().runTaskTimer(this, () -> {
+        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
             for (Player player : getServer().getOnlinePlayers()) {
                 PlayerItemHeldListener.checkAndApplyEffects(this, player);
             }
